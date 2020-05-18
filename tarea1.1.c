@@ -1,43 +1,55 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+/*
 char ** buscar_str(char ** S, int n, char * P){
 
-    //for palabra(linea) in archivo
+    //for letra(linea) in archivo
     for(int i = 0;i < n; i++){
 
    	}
-    return lmao
+    return;
 }
+*/
 
 int main(){
-	//Abrir archivo fp (P)
-	FILE *fp;
-	fp = open("Archivo_P.txt", "w");
-    //Abrir archivo fs (S)
-    FILE *fs;
-    fs = open("Archivo_S.txt", "w");
+	
+    FILE *fs, *fp;
+    int largo_S = 0, largo_P = 0;
+    //Char en ASCII
+    int letra;
+    //Palabra (string)
+    char palabra[200];
+
+    fs = fopen("Archivo_S.txt", "r");
+    fp = fopen("Archivo_P.txt", "r");
 
     //saber cuantos strings hay en Archivo_S (n)
-    int largo=0;
-    int v=1;
-    char temp;
-    while(v){
-        temp = fread(&temp,sizeof(char),1,fs)
-        if temp == "EOF"{
-            v = 0;
-        }
-        largo++;
+    if (fs) {
+        while ((letra = getc(fs)) != EOF){
+            if(letra == 10)
+                largo_S++;
+        }    
     }
-    //sinceramente no se que hice arriba pero ojala funcione XDDDDD
-    //for palabra_P in fp
-	for(int i = 0;i < k;i++){
-        los_que_estan = buscar_str(fs, largo, palabra_P);
+    printf("Hay %d strings en el archivo s.\n", largo_S);
 
-        //Crear archivo
-        for palabra in los_que_estan:
-            archivo.write(palabra\n);
+    if (fp) {
+        while ((letra = getc(fp)) != EOF)
+            if(letra == 10)
+                largo_P++;
+    }
+
+    //Array de S
+    char* array_S[largo_S];
+
+    fseek(fs,0,SEEK_SET);
+	for(int i = 0; i < largo_S; i++){
+        printf("%d\n", i);
+        fgets(palabra, sizeof(palabra), fs);
+        array_S[i] = palabra;
+        printf("palabra: %s\n", palabra);
 	}
-	buscar_str();
+
+    fclose(fp);
+    fclose(fs);
 }
