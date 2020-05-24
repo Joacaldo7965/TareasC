@@ -122,12 +122,11 @@ int main(){
         printf("tamArray: %d\n", tamArray_prefijos);
 
         for(int i = 0; i < tamArray_prefijos; i++){
-            //printf("array_prefijos[%d]: %s\n",i, array_prefijos[i]);
 
             /* esta linea esta como las weas*/
-            fprintf(fw, "%s", array_prefijos[i]);
+            //fprintf(fw, "%s", array_prefijos[i]);
 
-            //printf("array_prefijos[%d]: %s\n",i, array_prefijos[i]);
+            printf("array_prefijos[%d]: %s\n", i, array_prefijos[i]);
             }
         fclose(fw);
 

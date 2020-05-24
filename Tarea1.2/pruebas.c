@@ -4,12 +4,10 @@
 
 char* append(char* str, char c){
     int len = strlen(str);
-    char *str2 = malloc(len + 1 + 1 ); /* one for extra char, one for trailing zero */
+    char *str2 = malloc(len + 1 + 1 );
     strcpy(str2, str);
     str2[len] = c;
     str2[len + 1] = '\0';
-
-    //printf( "%s\n", str2 ); /* prints "blablablaH" */
     return str2;
 }
 
@@ -25,28 +23,46 @@ int main(){
         exit(1);
     }
     while (1){  
-        char* str = "";
+        char str[50] = "";
         char c_transaccion = 'x';
+        char* tokens[5];
+        int t_count = 0;
 
         while ((c_transaccion = getc(fpt)) != EOF){
             if(c_transaccion == 10)
                 break;
             //str.append(c_transaccion);
             //strcat(str, c_transaccion);
-            str = append(str, c_transaccion);
+            char* str2 = append(str, c_transaccion);
             
-            printf( "String 2: %s\n", str);
-            free(str);
+            strcpy(str, str2);
+            free(str2);
             }
-        if(c_transaccion == EOF)
-            break;
+        printf( "String 2: %s\n", str);
 
         char *token = strtok(str, " "); 
+        tokens[t_count] = token;
 
         while (token != NULL) { 
-            printf("token: [%s]\n", token); 
-            token = strtok(NULL, " "); 
-        }      
+            token = strtok(NULL, " ");
+            tokens[++t_count] = token; 
+        }
+        for (int i = 0; i < t_count; i++){
+            printf("token: [%s]\n", tokens[i]); 
+        }
+
+
+        //TODO TODO
+        // ver que funcion es (+ - >)
+            /*code*/
+        // realizar la accion en el array a_clientes
+            /*code*/
+        // modificar el archivo binario con los cambios
+            /*code*/
+
+
+        if(c_transaccion == EOF)
+            break;
     }
 
     return 0;
