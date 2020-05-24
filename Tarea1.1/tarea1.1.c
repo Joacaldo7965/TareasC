@@ -14,6 +14,8 @@ char ** buscar_str(char ** S, int n, char * P, int *tamArray_salidaa){
 
     
     salidaa = malloc(sizeof(char) * n);
+    if(salidaa == NULL)
+        printf("\nLa Trolleamos\n");
     //printf("lengt_P: %d\n", length_P);
     for(int i = 0; i < n; i++){
         //printf("P: %s", P);
@@ -83,7 +85,7 @@ int main(){
             /* TODO */         
         // esta wea no sirve, hay que arreglarlo xdxd
         //array_S[i] = palabra_in_S;
-        array_S[i] = malloc(200);
+        array_S[i] = malloc(sizeof(char)*200);
         strcpy(array_S[i], palabra_in_S);
         //free(array_S[i]);
 
@@ -118,11 +120,17 @@ int main(){
             exit(1);
         }
         printf("tamArray: %d\n", tamArray_prefijos);
+
         for(int i = 0; i < tamArray_prefijos; i++){
+            //printf("array_prefijos[%d]: %s\n",i, array_prefijos[i]);
+
+            /* esta linea esta como las weas*/
             fprintf(fw, "%s", array_prefijos[i]);
+
             //printf("array_prefijos[%d]: %s\n",i, array_prefijos[i]);
             }
         fclose(fw);
+
         }
     fclose(fp);
 
