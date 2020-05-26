@@ -15,7 +15,7 @@ char ** buscar_str(char ** S, int n, char * P, int *tamArray_salidaa){
     
     salidaa = malloc(sizeof(char) * n);
     if(salidaa == NULL)
-        printf("\nLa Trolleamos\n");
+        printf("Error al hacer el\n");
     //printf("lengt_P: %d\n", length_P);
     for(int i = 0; i < n; i++){
         //printf("P: %s", P);

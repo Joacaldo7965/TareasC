@@ -1,7 +1,7 @@
 # Tarea 1
 
 ## Compilado usando gcc
-Los archivos .c fueron compilados usando el comando:
+Los archivos fueron compilados usando el comando:
 ```bash
 gcc <nombre_archivo.c> -o <nombre_archivo>
 ```
