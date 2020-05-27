@@ -1,0 +1,6 @@
+Nombre Apellido  |     Rol     |  Paralelo  | Programó
+Joaquín Calderón   201973571-3     p.200       *todo
+Daniel Martínez    201973508-k     p.200       *todo
+Tomás Nieto        201973529-2     p.200       *todo
+
+*todo = Se organizaron meetings diarios para la árdua labor de hacer esta obra de arte (vía Discord).

@@ -10,3 +10,7 @@ gcc <nombre_archivo.c> -o <nombre_archivo>
 Joaquin Calderon, 201973571-3<br/>
 Daniel Martinez, 201973508-k<br/>
 Tomas Nieto, 201973529-2
+
+## Más Info
+
+[Repositorio Github](https://github.com/Joacaldo7965/TareasC)

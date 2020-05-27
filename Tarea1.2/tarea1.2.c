@@ -92,7 +92,6 @@ void actualizarSaldos(char *clientes, char *transacciones){
 
     // Transacciones
     FILE *fpt;
-    int count = 0;
 
     fpt = fopen(transacciones, "r");
     printf("abriendo archivo transacciones: %s\n", transacciones);
@@ -199,7 +198,7 @@ void actualizarSaldos(char *clientes, char *transacciones){
 
     FILE *fpw;
 
-    fpw = fopen("out.dat", "w");
+    fpw = fopen(clientes, "w");
     
     for (int i = 0; i < cantidad_clientes; i++){
         fwrite(&a_clientes[i], sizeof(clienteBanco), 1, fpw);
