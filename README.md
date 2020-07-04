@@ -1,4 +1,4 @@
-# Tarea 1
+# Tareas
 
 ## Compilado usando gcc
 Los archivos fueron compilados usando el comando:
