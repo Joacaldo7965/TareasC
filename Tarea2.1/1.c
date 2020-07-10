@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
 void mallok(){
     return;
 }
@@ -10,6 +11,7 @@ void mallok(){
 void freee(){
     return;
 }
+*/
 
 int empty(tLista *L){
     return 0;
@@ -62,7 +64,7 @@ int main(int argc, char const *argv[]){
 
         if (!strncmp(command, "m", 1)){
 
-            int B = insert(L1, L2, numero_de_bytes);
+            int B = mallok(L1, L2, numero_de_bytes);
 
             // Si insert1() retorna la pos => se inserto exitosamente
             if(B > 0){                
@@ -74,7 +76,7 @@ int main(int argc, char const *argv[]){
             }
         }else if(!strncmp(command, "f", 1)){
             
-            freee();
+            freee(L1, L2, );
 
             printf("Bloque de %d bytes liberado\n", numero_de_bytes);
         }

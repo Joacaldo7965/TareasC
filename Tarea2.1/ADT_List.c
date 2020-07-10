@@ -64,7 +64,7 @@ void deleteAtPos(tLista *L, int position){
 }
 
 
-int insert(tLista* L1, tLista* L2, int bytes){//tElemLista start, tElemLista end) {
+int malok(tLista* L1, tLista* L2, int bytes){//tElemLista start, tElemLista end) {
 
     // Recorre L1 Nodo a Nodo
     L1->curr = L1->head;
@@ -128,8 +128,6 @@ int insert(tLista* L1, tLista* L2, int bytes){//tElemLista start, tElemLista end
         L1->pos++;
     }
     
-
-
     /*
     tNodo* aux = L1->curr->sig;
     L1->curr->sig = malloc(sizeof(tNodo));
@@ -143,7 +141,8 @@ int insert(tLista* L1, tLista* L2, int bytes){//tElemLista start, tElemLista end
     */
 }
 
-int insert2(tLista* L, tElemLista start, tElemLista end) {
+
+int insert2(tLista *L, tElemLista start, tElemLista end) {
     tNodo* aux = L->curr->sig;
     L->curr->sig = malloc(sizeof(tNodo));
     L->curr->sig->start = start;
@@ -154,6 +153,117 @@ int insert2(tLista* L, tElemLista start, tElemLista end) {
     return L->pos;
 }
 
+
+void freee(tLista *L1, tLista *L2, int bytes){
+    /* Se busca en L2 hasta que L2->curr->start sea igual a bytes.
+    *  Luego se añade a L1 respetando el orden, despues:
+    *   1) Se verifica si L1->curr->start == L1->prev->end:
+    *           En tal caso se hace el merge entre el bloque prev y el curr
+    *   2) Se verifica si L1->curr->end == L1->curr->sig->start:
+    *           En tal caso se hace el merge de los bloques curr y curr->sig
+    * 
+    *   Finalmente se borra el bloque de L2.
+    */
+
+
+    L2->curr = L2->head;
+    L2->pos = 0;
+
+    while (PRAVDA){
+
+        // Si la lista esta vacía o en su defecto llego al final retorna;
+        if(L2->curr == NULL)
+            return;
+        
+        // Si se encontró el byte se hace el free y se retorna
+        if(L2->curr->start == bytes){
+            
+            /* 2 Opciones:
+            *  1) Sorted Insert en L1 y luego hacer merge si se cumplen 
+            *     las condiciones antes mencionadas
+            * 
+            *  2) Hacer el Sorted Insert directamente con el merge          <-------------
+            */
+
+            // Opción 2
+            tNodo *head = L1->head;
+            tNodo *new_node;
+
+            new_node->start = L2->curr->start;
+            new_node->end = L2->curr->end;
+
+            /* Special case for the head end */
+            if (head == NULL || head->start >= new_node->start) { 
+                /* 2 casos: 
+                *   1) new_node->end != head->start
+                *   2) new_node->end == head->start
+                *
+                *   __________
+                *  |          |
+                *  | new_node |
+                *  |__________|
+                *                 
+                *       |
+                *       v
+                *             __________          _______________
+                *            |          |        |               |
+                *            |   head   |  ----> |  current->sig | ---->  ...
+                *            |__________|        |_______________|
+                */
+
+                if(new_node->end != head->start){
+                    new_node->sig = head; 
+                    L1->head = new_node; 
+                } else{
+                    head->start = new_node->end;  // Se extiende head con el nodo anterior
+                }        
+            } else { 
+                tNodo *current = head;
+                
+                /* Locate the node before the point of insertion */
+                while (current->sig != NULL && current->sig->start < new_node->start) { 
+                    current = current->sig; 
+                }
+
+                // View merge cases
+                /*               __________
+                *               |          |
+                *               | new_node |
+                *               |__________|
+                *                  
+                *                    |
+                *                    v
+                *      __________          _______________
+                *     |          |        |               |
+                * --> | current  |  ----> |  current->sig | ---->  ...
+                *     |__________|        |_______________|
+                */
+
+                if(current->end == new_node->start && new_node->end == current->sig->start){
+
+                    current->end = current->sig->end;  // Se extiende con el nodo anterior y posterior
+                    current->sig = current->sig->sig;  // Se modifican los punteros
+
+                }else if(current->end == new_node->start){
+                    current->end = new_node->end;  // Se extiende el nodo anterior y los punteros se mantienen
+
+                }else if(new_node->end == current->sig->start){
+                    current->sig->start = new_node->start; // Se extiende con el nodo posterior y los punteros se mantienen
+                } 
+            } 
+            
+
+            
+            deleteAtPos(L2, L2->pos);
+
+            return;
+        }
+        
+        L2->curr = L2->curr->sig;
+        L2->pos++;
+    }
+    return;
+}
 
 
 void next(tLista* L) {
@@ -197,3 +307,26 @@ void printHelp(tNodo* head) {
 void printList(tLista *L){
     return printHelp(L->head);
 }
+
+void sortedInsert(tLista *L, tElemLista start, tElemLista end){ 
+    tNodo *head = L->head;
+    tNodo *new_node;
+
+    new_node->start = start;
+    new_node->end = end;
+
+    /* Special case for the head end */
+    if (head == NULL || head->start >= new_node->start) { 
+        new_node->sig = head; 
+        head = new_node; 
+    } else { 
+        tNodo *current = head;
+        /* Locate the node before the point of insertion */
+
+        while (current->sig != NULL && current->sig->start < new_node->start) { 
+            current = current->sig; 
+        } 
+        new_node->sig = current->sig; 
+        current->sig = new_node; 
+    } 
+} 
