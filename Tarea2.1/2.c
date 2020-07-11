@@ -4,6 +4,28 @@
 #include <string.h>
 
 
+/*****
+*
+int sucesor()
+******
+*
+Retorna el menor valor, de los mayores a n. 
+Si no lo encuentra retorna u.
+******
+*
+Input:
+*
+Node* T : Raíz del árbol.
+int   n : El numero del que se quiere saber el sucesor.
+int   u : El máximo valor posible del árbol.
+*
+.......
+******
+*
+Returns:
+*
+int, Retorna el menor valor, de los mayores a n.
+*****/
 int sucesor(Node* T, int n, int u){
     // Recorrido In-orden
     int mejor = u;
@@ -13,8 +35,26 @@ int sucesor(Node* T, int n, int u){
     int nodeValue;
     int dif;
 
+    /*****
+    *
+    int inOrden()
+    ******
+    *
+    Recorre el árbol en inOrden buscando el sucesor.
+    ******
+    *
+    Input:
+    *
+    Node* T : Raíz del árbol.
+    *
+    .......
+    ******
+    *
+    Returns:
+    *
+    int, Retorna el sucesor.
+    *****/
     int inOrden(Node* T){
-        // Algoritmo de Tomás Dijkstra
         pasocorbata = 1;
         if(T == NULL) return u;
         nodeRight = getRight(T);
@@ -22,15 +62,15 @@ int sucesor(Node* T, int n, int u){
         inOrden(nodeLeft);
         nodeValue = getValue(T);
         dif = nodeValue - n;
-        //printf("dif: %d\n", dif);
-        if(dif > 0)
+        if(dif > 0){
             if(dif < mejor)
                 mejor = dif;
             else
                 pasocorbata = 0;
+        }
         if (pasocorbata)
             inOrden(nodeRight);
-        if(mejor == u) return u;
+        //if(mejor == u) return u;
         return mejor + n;
     }
 
@@ -40,7 +80,6 @@ int sucesor(Node* T, int n, int u){
 int main(int argc, char const *argv[]){
 
     FILE *fp;
-    char ch;
     long u;
 
     fp = fopen("input.txt", "r");
@@ -56,22 +95,22 @@ int main(int argc, char const *argv[]){
     char number_str[9];
 
     // Init Tree
-    Node *T = initTree(T);
+    Node *T = initTree();
     
     while (!feof(fp)){
         fscanf(fp,"%s",command);
         
         if (!strncmp(command, "P", 1)){
             preOrden(T);
-            //printf("\n");
+            printf("\n");
         }else{
 
             fscanf(fp, "%s", number_str);
             int number = atoi(number_str);
 
             if(!strncmp(command, "S", 1)){
-                sucesor(T, number, u);
-                //printf("%d\n", sucesor(T, number, u)); 
+                //sucesor(T, number, u);
+                printf("%d\n", sucesor(T, number, u)); 
             } else if (!strncmp(command, "I", 1)){
                 T = insert(T, number);
             } else if (!strncmp(command, "B", 1)){
@@ -79,7 +118,6 @@ int main(int argc, char const *argv[]){
             }
         }
     }
-    //clear(T);
     
     fclose(fp);
 

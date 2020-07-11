@@ -8,7 +8,25 @@ typedef struct nodoArbolBin{
     struct nodoArbolBin *right;
 } Node;
 
-/* Auxiliar functions */
+/*****
+*
+Node* newNode()
+******
+*
+Genera un nuevo nodo.
+******
+*
+Input:
+*
+int item : Valor del nodo.
+*
+.......
+******
+*
+Returns:
+*
+Node* , Retorna un Nodo.
+*****/
 Node *newNode(int item) {
     Node *temp = (Node *)malloc(sizeof(Node));
     temp->info = item;
@@ -16,6 +34,26 @@ Node *newNode(int item) {
     return temp;
 }
 
+/*****
+*
+Node* insertHelp()
+******
+*
+Ayuda a la funcion insert()
+******
+*
+Input:
+*
+Node* node : Raíz del árbol.
+int item : Nodo que se quiere añadir al árbol.
+*
+.......
+******
+*
+Returns:
+*
+Node* Retorna la raíz del árbol.
+*****/
 Node *insertHelp(Node *node, int item) {
     if (node == NULL) return newNode(item);
     if (item < node->info)
@@ -26,26 +64,119 @@ Node *insertHelp(Node *node, int item) {
 }
 
 
+/*****
+*
+Node* initTree()
+******
+*
+Inicializa un Árbol
+******
+*
+Input:
+*
 
-//inicializa un Abb como vacio
+*
+.......
+******
+*
+Returns:
+*
+Node* , Retorna un arbol vacio.
+*****/
 Node* initTree(){
     return NULL;
 }
 
-//obtiene el valor del nodo
+/*****
+*
+int getValue()
+******
+*
+Obtiene el valor de un nodo
+******
+*
+Input:
+*
+Node* nodo : Nodo del que se quiere obtener el valor.
+*
+.......
+******
+*
+Returns:
+*
+int , Retorna el valor del nodo.
+*****/
 int getValue(Node *nodo){
     return(nodo->info);
 }
 
+/*****
+*
+Node* getRight()
+******
+*
+Obtiene el hijo derecho de un nodo.
+******
+*
+Input:
+*
+Node* nodo : Nodo del que se quiere obtener el hijo derecho.
+*
+.......
+******
+*
+Returns:
+*
+Node* , Retorna el hijo derecho.
+*****/
 Node* getRight(Node* nodo){
     return nodo->right;
 }
 
+/*****
+*
+Node* getLeft()
+******
+*
+Obtiene el hijo izquierdo de un nodo.
+******
+*
+Input:
+*
+Node* nodo : Nodo del que se quiere obtener el hijo izquierdo.
+*
+.......
+******
+*
+Returns:
+*
+Node* , Retorna el hijo izquierdo.
+*****/
 Node* getLeft(Node* nodo){
     return nodo->left;
 }
 
-//funcion auxiliar de find()
+
+/*****
+*
+int find()
+******
+*
+Ve si un nodo esta presente en el Árbol.
+******
+*
+Input:
+*
+Node* nodo : Raíz del Árbol.
+int item: Valor que se busa en el arbol
+*
+.......
+******
+*
+Returns:
+*
+Node* Retorna 1 si lo encontro, o 0 si No.
+*****/
 int find(Node *nodo, int item){
     if(nodo == NULL) return 0;
     if(getValue(nodo) == item) return 1;
@@ -56,20 +187,52 @@ int find(Node *nodo, int item){
     }
 }
 
+/*****
+*
+Node* insert()
+******
+*
+Inserta un nodo en el árbol.
+******
+*
+Input:
+*
+Node* node : Raíz del árbol.
+int item : Nodo que se quiere insertar.
+*
+.......
+******
+*
+Returns:
+*
+Node* , Retorna la raíz del árbol.
+*****/
 Node* insert(Node *node, int item){
     if(!find(node, item))
         return insertHelp(node, item);
     return node;
 }
 
-//function to find the minimum value in a node
-Node* findMin(Node *T){
-    if(T == NULL) return NULL;
-    else if(T->left != NULL) // node with minimum value will have no left child
-        return findMin(T->left); // left most element will be minimum
-    return T;
-}
 
+/*****
+*
+Node* findMax()
+******
+*
+Obtiene el mayor valor de un árbol.
+******
+*
+Input:
+*
+Node* T : Raíz del árbol.
+*
+.......
+******
+*
+Returns:
+*
+Node* , Retorna el maximo valor de un árbol.
+*****/
 Node* findMax(Node *T){
     if(T == NULL) return NULL;
     else if(T->right != NULL) // node with minimum value will have no left child
@@ -77,6 +240,26 @@ Node* findMax(Node *T){
     return T;
 }
 
+/*****
+*
+Node* remove_()
+******
+*
+Borra un Nodo del árbol.
+******
+*
+Input:
+*
+Node* T : Raíz del árbol.
+int item : Elemento que se quiere borrar.
+*
+.......
+******
+*
+Returns:
+*
+Node* , Retorna la raíz del arbol.
+*****/
 Node* remove_(Node *T, int item){
     //searching for the item to be removed
     if(T==NULL)
@@ -103,12 +286,6 @@ Node* remove_(Node *T, int item){
         }
         //Two Children
         else{
-            // Find Min
-            /*
-            Node *temp = findMin(T->right);
-            T->info = temp->info;
-            T->right = remove_(T->right, temp->info);
-            */
             //Find Max
             Node *temp = findMax(T->left);
             T->info = temp->info;
@@ -119,18 +296,29 @@ Node* remove_(Node *T, int item){
     return T;
 }
 
-//elimina todos los elementos en un Abb, dejandolo vacio
-void clear(Node *T){
-    if(T == NULL) return;
-    clear(T->left);
-    clear(T->right);
-    free(T);
-}
 
-// Recorrido preOrden
+/*****
+*
+void preOrden()
+******
+*
+Recorre el arbol en preorden y hace print de los nodos.
+******
+*
+Input:
+*
+Node* T : Raíz del árbol
+*
+.......
+******
+*
+Returns:
+*
+void, No Retorna nada.
+*****/
 void preOrden(Node *T){
     if(T != NULL){
-        //printf("%d ", getValue(T));
+        printf("%d ", getValue(T));
         preOrden(T->left);
         preOrden(T->right);
     }

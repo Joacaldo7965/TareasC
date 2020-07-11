@@ -20,7 +20,25 @@ typedef struct {
 } tLista;
 
 
-
+/*****
+*
+void initLista()
+******
+*
+Inicializa la lista.
+******
+*
+Input:
+*
+tLista* L : Lista a inicializar.
+*
+.......
+******
+*
+Returns:
+*
+void, No retorna nada.
+*****/
 void initList(tLista *L) {
     L->head = L->tail = L->curr = malloc(sizeof(tNodo));
     L->listSize = 0; L->pos = 0;
@@ -28,7 +46,26 @@ void initList(tLista *L) {
 }
 
 
-
+/*****
+*
+void deleteAtPos()
+******
+*
+Borra un elemento de la lista en cierta posicion.
+******
+*
+Input:
+*
+tLista* L : Lista.
+int position: Posicion del elemente a borrar.
+*
+.......
+******
+*
+Returns:
+*
+void, No retorna nada.
+*****/
 void deleteAtPos(tLista *L, int position){ 
     tNodo *head = L->head;
 
@@ -63,14 +100,32 @@ void deleteAtPos(tLista *L, int position){
     temp->sig = next;  // Unlink the deleted node from list 
 }
 
-
-int malok(tLista* L1, tLista* L2, int bytes){//tElemLista start, tElemLista end) {
+/*****
+*
+int mallok()
+******
+*
+TODO
+******
+*
+Input:
+*
+tLista* L1    : Lista 1.
+tLista* L2    : Lista 2.
+int     bytes : bytes que fueron pedidos.
+*
+.......
+******
+*
+Returns:
+*
+int, Retorna el byte donde fue asignada la memoria.
+*****/
+int mallok(tLista* L1, tLista* L2, int bytes){
 
     // Recorre L1 Nodo a Nodo
     L1->curr = L1->head;
     L1->pos = 0;
-
-    int flag = 0;
 
     int B;
 
@@ -83,14 +138,14 @@ int malok(tLista* L1, tLista* L2, int bytes){//tElemLista start, tElemLista end)
         if(dif > bytes){
             // Se quita de L1 el bloque pedido a partir del comienzo y se agrega el bloque quitado a L2
             /* El nodo de L1 queda:
-                x->start = x->start + bytes + ¿1?;
+                x->start = x->start + bytes;
                 x->end = x->end;
                 more info in "images/xd.png"
             */
             
             // Quitar bloque de L1 y reajustar lo restante
             B = L1->curr->start;
-            L1->curr->start = B + bytes; //¿ + 1; ?
+            L1->curr->start = B + bytes;
 
             // Agregar lo quitado de L1 a L2
             tNodo* aux = L2->curr->sig;
@@ -141,8 +196,28 @@ int malok(tLista* L1, tLista* L2, int bytes){//tElemLista start, tElemLista end)
     */
 }
 
-
-int insert2(tLista *L, tElemLista start, tElemLista end) {
+/*****
+*
+int insert()
+******
+*
+Inserta un elemento en la lista
+******
+*
+Input:
+*
+tLista*    L     : Lista donde se insertan los elementos.
+tElemLista start : Primer elemento a insertar.
+tElemLista end   : Segundo elemento a insertar.
+*
+.......
+******
+*
+Returns:
+*
+int, Retorna la posicion en la que fueron insertados los elementos.
+*****/
+int insert(tLista *L, tElemLista start, tElemLista end) {
     tNodo* aux = L->curr->sig;
     L->curr->sig = malloc(sizeof(tNodo));
     L->curr->sig->start = start;
@@ -153,8 +228,28 @@ int insert2(tLista *L, tElemLista start, tElemLista end) {
     return L->pos;
 }
 
-
-void freee(tLista *L1, tLista *L2, int bytes){
+/*****
+*
+int freee()
+******
+*
+TODO
+******
+*
+Input:
+*
+tLista* L1 : Lista 1.
+tLista* L2 : Lista 2.
+int bytes : Byte donde comienza el bloque que se desea liberar.
+*
+.......
+******
+*
+Returns:
+*
+int, Retorna los bytes que fueron liberados.
+*****/
+int freee(tLista *L1, tLista *L2, int bytes){
     /* Se busca en L2 hasta que L2->curr->start sea igual a bytes.
     *  Luego se añade a L1 respetando el orden, despues:
     *   1) Se verifica si L1->curr->start == L1->prev->end:
@@ -173,7 +268,7 @@ void freee(tLista *L1, tLista *L2, int bytes){
 
         // Si la lista esta vacía o en su defecto llego al final retorna;
         if(L2->curr == NULL)
-            return;
+            return -1;
         
         // Si se encontró el byte se hace el free y se retorna
         if(L2->curr->start == bytes){
@@ -186,14 +281,13 @@ void freee(tLista *L1, tLista *L2, int bytes){
             */
 
             // Opción 2
-            tNodo *head = L1->head;
-            tNodo *new_node;
+            tNodo *new_node = malloc(sizeof(tNodo));
 
             new_node->start = L2->curr->start;
             new_node->end = L2->curr->end;
 
-            /* Special case for the head end */
-            if (head == NULL || head->start >= new_node->start) { 
+            // Cuando es head
+            if (L1->head == NULL || L1->head->start >= new_node->start) { 
                 /* 2 casos: 
                 *   1) new_node->end != head->start
                 *   2) new_node->end == head->start
@@ -211,21 +305,22 @@ void freee(tLista *L1, tLista *L2, int bytes){
                 *            |__________|        |_______________|
                 */
 
-                if(new_node->end != head->start){
-                    new_node->sig = head; 
+                if(new_node->end != L1->head->start){
+                    new_node->sig = L1->head; 
                     L1->head = new_node; 
                 } else{
-                    head->start = new_node->end;  // Se extiende head con el nodo anterior
+                    L1->head->start = new_node->start;  // Se extiende head con el nodo anterior
                 }        
-            } else { 
-                tNodo *current = head;
+            } 
+            else { 
+                tNodo *current = L1->head;
                 
-                /* Locate the node before the point of insertion */
+                // Se busca el nodo anterior a el que se quiere insertar
                 while (current->sig != NULL && current->sig->start < new_node->start) { 
                     current = current->sig; 
                 }
 
-                // View merge cases
+                // Ver los casos de merge
                 /*               __________
                 *               |          |
                 *               | new_node |
@@ -249,84 +344,97 @@ void freee(tLista *L1, tLista *L2, int bytes){
 
                 }else if(new_node->end == current->sig->start){
                     current->sig->start = new_node->start; // Se extiende con el nodo posterior y los punteros se mantienen
-                } 
+                } else{
+                    new_node->sig = current->sig; 
+                    current->sig = new_node; 
+                }
             } 
             
-
+            int memoria_liberada = L2->curr->end - L2->curr->start;
             
             deleteAtPos(L2, L2->pos);
 
-            return;
-        }
-        
+            return memoria_liberada;
+        }     
         L2->curr = L2->curr->sig;
         L2->pos++;
     }
-    return;
 }
 
 
-void next(tLista* L) {
-    if (L->curr != L->tail)
-        L->curr = L->curr->sig; L->pos++;
-}
+/*****
+*
+void sinLiberar()
+******
+*
+Cuenta la cantidad de elementos de la lista y además cuantos bytes quedan sin liberar.
+******
+*
+Input:
+*
+tLista* L         : Lista.
+int*    b_no_lib  : referencia a bytes no liberados.
+int*    n_bloques : referencia al numero de elementos de la lista
+*
+.......
+******
+*
+Returns:
+*
+TipoRetorno, Descripción retorno
+*****/
+void sinLiberar(tLista *L, int *b_no_lib, int *n_bloques){
+    L->curr = L->head;
+    L->pos = 0;
 
-// ¿¿ ??
-void deleteHelp(tNodo** head) { 
-   /* deref head to get the real head */
-   tNodo* current = *head; 
-   tNodo* next; 
-  
-   while (current != NULL){ 
-       next = current->sig; 
-       free(current); 
-       current = next; 
-   } 
+    int dif;
+
+    //printList(L);
+
+    // Recorre todos los nodos
+    while (PRAVDA){
+        if(L->curr == NULL)
+            return;
+
+        // Cada nodo se suma los bytes no liberados
+        dif = L->curr->end - L->curr->start;
+        if (dif != 0){
+            *b_no_lib += dif;
+            *n_bloques += 1;    
+        }
+
+        L->curr = L->curr->sig;
+        L->pos++;
+    }
     
-   /* deref head to affect the real head back 
-      in the caller. */
-   *head = NULL; 
-} 
-
-void deleteList(tLista *L){
-    return deleteHelp(&L->head);
 }
 
-
-
-void printHelp(tNodo* head) { 
-    tNodo* temp = head;
-    printf("List:\n"); 
+/*****
+*
+void printList()
+******
+*
+Hace un print de la lista. (usado para debug)
+******
+*
+Input:
+*
+tLista* L : Lista a printear.
+*
+.......
+******
+*
+Returns:
+*
+void, No retorna nada.
+*****/
+void printList(tLista *L){
+    tNodo* temp = L->head;
+    //printf("List:\n"); 
     while (temp != NULL) { 
         printf("\tstart: %d\n", temp->start); 
         printf("\tend: %d\n", temp->end); 
         temp = temp->sig; 
-    } 
+    }
 }
 
-void printList(tLista *L){
-    return printHelp(L->head);
-}
-
-void sortedInsert(tLista *L, tElemLista start, tElemLista end){ 
-    tNodo *head = L->head;
-    tNodo *new_node;
-
-    new_node->start = start;
-    new_node->end = end;
-
-    /* Special case for the head end */
-    if (head == NULL || head->start >= new_node->start) { 
-        new_node->sig = head; 
-        head = new_node; 
-    } else { 
-        tNodo *current = head;
-        /* Locate the node before the point of insertion */
-
-        while (current->sig != NULL && current->sig->start < new_node->start) { 
-            current = current->sig; 
-        } 
-        new_node->sig = current->sig; 
-        current->sig = new_node; 
-    } 
-} 
