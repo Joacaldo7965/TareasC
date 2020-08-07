@@ -69,35 +69,34 @@ void, No retorna nada.
 void deleteAtPos(tLista *L, int position){ 
     tNodo *head = L->head;
 
-    // If linked list is empty 
+    // Si la lista esta vacia
     if (head == NULL) 
         return; 
-    // Store head node 
+    // Guarda el Head
     tNodo* temp = head; 
   
-    // If head needs to be removed 
+    // Si el head necesita ser eliminado 
     if (position == 0){ 
-        head = temp->sig;   // Change head 
-        free(temp);               // free old head 
+        head = temp->sig;   // Se cambia el head
+        free(temp);               // Libera la head antigua 
         return; 
     } 
   
-    // Find previous node of the node to be deleted 
+    // Se busca el nodo anterior al que se quiere eliminar
     for (int i=0; temp!=NULL && i<position-1; i++) 
          temp = temp->sig; 
   
-    // If position is more than number of nodes 
+    // Si la posicion es mayor a la cantidad de nodos
     if (temp == NULL || temp->sig == NULL) 
          return; 
   
-    // Node temp->next is the node to be deleted 
-    // Store pointer to the next of node to be deleted 
+    // temp->sig es el que se quiere borrar
+    // Se guarda el siguiente al que se quiere borrar
     tNodo *next = temp->sig->sig; 
   
-    // Unlink the node from linked list 
-    free(temp->sig);  // Free memory 
-  
-    temp->sig = next;  // Unlink the deleted node from list 
+    // Se elimina el nodo
+    free(temp->sig);
+    temp->sig = next;  // Se ajustan los punteros
 }
 
 /*****
@@ -105,7 +104,7 @@ void deleteAtPos(tLista *L, int position){
 int mallok()
 ******
 *
-TODO
+Busca el espacio pedido en L1 y lo agrega a L2.
 ******
 *
 Input:
@@ -133,14 +132,14 @@ int mallok(tLista* L1, tLista* L2, int bytes){
         if(L1->curr == NULL)
             return -1;
 
-        int dif = L1->curr->end - L1->curr->start;
+        // Tamaño del nodo
+        int dif = L1->curr->end - L1->curr->start + 1;
 
         if(dif > bytes){
             // Se quita de L1 el bloque pedido a partir del comienzo y se agrega el bloque quitado a L2
             /* El nodo de L1 queda:
-                x->start = x->start + bytes;
-                x->end = x->end;
-                more info in "images/xd.png"
+            *    x->start = x->start + bytes;
+            *    x->end = x->end;
             */
             
             // Quitar bloque de L1 y reajustar lo restante
@@ -148,8 +147,8 @@ int mallok(tLista* L1, tLista* L2, int bytes){
             L1->curr->start = B + bytes;
 
             // Agregar lo quitado de L1 a L2
-            tNodo* aux = L2->curr->sig;
             L2->curr = L2->head;
+            tNodo* aux = L2->curr->sig;
             L2->curr->sig = malloc(sizeof(tNodo));
             L2->curr->sig->start = B;
             L2->curr->sig->end = B + bytes;
@@ -160,7 +159,7 @@ int mallok(tLista* L1, tLista* L2, int bytes){
             return B;
 
         } else if(dif == bytes){
-            // Si es igual se agrega tal cual a L2 y te lo pitiai de osico.
+            // Si es igual se agrega tal cual a L2 y se elimina.
 
             B = L1->curr->start;
 
@@ -182,18 +181,6 @@ int mallok(tLista* L1, tLista* L2, int bytes){
         L1->curr = L1->curr->sig;
         L1->pos++;
     }
-    
-    /*
-    tNodo* aux = L1->curr->sig;
-    L1->curr->sig = malloc(sizeof(tNodo));
-    L1->curr->sig->start = start;
-    L1->curr->sig->end = end;
-    L1->curr->sig->sig = aux;
-    if (L1->curr == L1->tail) L1->tail = L1->curr->sig;
-    L1->listSize++;
-
-    return L1->pos;
-    */
 }
 
 /*****
@@ -233,7 +220,7 @@ int insert(tLista *L, tElemLista start, tElemLista end) {
 int freee()
 ******
 *
-TODO
+Busca el byte inicial del bloque que se quiere liberar en L2 y lo pone en el espacio libre L1.
 ******
 *
 Input:
@@ -270,7 +257,7 @@ int freee(tLista *L1, tLista *L2, int bytes){
         if(L2->curr == NULL)
             return -1;
         
-        // Si se encontró el byte se hace el free y se retorna
+        // Si se encontró el byte se hace el freee y se retorna
         if(L2->curr->start == bytes){
             
             /* 2 Opciones:
@@ -309,7 +296,7 @@ int freee(tLista *L1, tLista *L2, int bytes){
                     new_node->sig = L1->head; 
                     L1->head = new_node; 
                 } else{
-                    L1->head->start = new_node->start;  // Se extiende head con el nodo anterior
+                    L1->head->start = new_node->start;  // Se extiende head con el new_node
                 }        
             } 
             else { 
@@ -334,7 +321,9 @@ int freee(tLista *L1, tLista *L2, int bytes){
                 *     |__________|        |_______________|
                 */
 
-                if(current->end == new_node->start && new_node->end == current->sig->start){
+                if(current->sig == NULL){ // En el caso en que se añada el nodo en la cola
+                    current->sig = new_node;
+                }else if(current->end == new_node->start && new_node->end == current->sig->start){
 
                     current->end = current->sig->end;  // Se extiende con el nodo anterior y posterior
                     current->sig = current->sig->sig;  // Se modifican los punteros
@@ -399,7 +388,7 @@ void sinLiberar(tLista *L, int *b_no_lib, int *n_bloques){
         // Cada nodo se suma los bytes no liberados
         dif = L->curr->end - L->curr->start;
         if (dif != 0){
-            *b_no_lib += dif;
+            *b_no_lib += (dif);
             *n_bloques += 1;    
         }
 
@@ -430,7 +419,6 @@ void, No retorna nada.
 *****/
 void printList(tLista *L){
     tNodo* temp = L->head;
-    //printf("List:\n"); 
     while (temp != NULL) { 
         printf("\tstart: %d\n", temp->start); 
         printf("\tend: %d\n", temp->end); 

@@ -1,9 +1,0 @@
-100
-5
-malloc 10
-malloc 20
-malloc 10
-malloc 20
-free 41
-malloc 20
-free 41

@@ -11,7 +11,7 @@ int main(int argc, char const *argv[]){
     long M;
     long N;
 
-    fp = fopen("example1.dat", "r");
+    fp = fopen("input1.dat", "r");
     if (fp == NULL){
         printf("Error al abrir el archivo.\n");
         exit(1);
@@ -34,14 +34,15 @@ int main(int argc, char const *argv[]){
     char number_str[11];
     int numero_de_bytes;
 
-    fw = fopen("output1.dat", "w");
+    fw = fopen("output.dat", "w");
     if (fw == NULL){
         printf("Error al crear el archivo.\n");
         exit(1);
     }
 
 
-    while (!feof(fp)){
+    for (int i = 0; i < N; i++){
+    
         fscanf(fp,"%s", command);
         fscanf(fp, "%s", number_str);
         numero_de_bytes = atoi(number_str);
@@ -51,21 +52,21 @@ int main(int argc, char const *argv[]){
 
             int B = mallok(L1, L2, numero_de_bytes);
 
-            // Si insert1() retorna la pos => se inserto exitosamente
+            // Si mallok() retorna la pos => se inserto exitosamente
             if(B > 0){                
-                //printf("Bloque de %d bytes asignado a partir del byte %d\n", numero_de_bytes, B);
+                //printf("Bloque de %d bytes asignado a partir del byte %d\n", numero_de_bytes, B); // Debug
                 fprintf(fw, "Bloque de %d bytes asignado a partir del byte %d\n", numero_de_bytes, B);
             
-            // Si insert1() retorna algo negativo => no hay espacio
+            // Si mallok() retorna algo negativo => no hay espacio
             } else{
-                //printf("Bloque de %d bytes NO puede ser asignado\n", numero_de_bytes);
+                //printf("Bloque de %d bytes NO puede ser asignado\n", numero_de_bytes);  // Debug
                 fprintf(fw, "Bloque de %d bytes NO puede ser asignado\n", numero_de_bytes);
             }
         }else if(!strncmp(command, "f", 1)){
             
             int mem_liberada = freee(L1, L2, numero_de_bytes);
 
-            //printf("Bloque de %d bytes liberado\n", mem_liberada);
+            //printf("Bloque de %d bytes liberado\n", mem_liberada);    // Debug
             fprintf(fw, "Bloque de %d bytes liberado\n", mem_liberada);
         }
 
@@ -86,11 +87,11 @@ int main(int argc, char const *argv[]){
     sinLiberar(L2, &b_no_liberados, &n_bloques);
 
     if(n_bloques == 0){
-        //printf("Toda la memoria dinámica pedida fue liberada\n");
+        //printf("Toda la memoria dinámica pedida fue liberada\n"); // Debug
         fprintf(fw, "Toda la memoria dinámica pedida fue liberada\n");
     }
     else{
-        //printf("Quedaron %d bloques sin liberar (%d bytes) \n", n_bloques, b_no_liberados);
+        //printf("Quedaron %d bloques sin liberar (%d bytes) \n", n_bloques, b_no_liberados); // Debug
         fprintf(fw, "Quedaron %d bloques sin liberar (%d bytes) \n", n_bloques, b_no_liberados);
     }
 

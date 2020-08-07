@@ -261,7 +261,7 @@ Returns:
 Node* , Retorna la raíz del arbol.
 *****/
 Node* remove_(Node *T, int item){
-    //searching for the item to be removed
+    // Se busca el item a ser removido
     if(T==NULL)
         return NULL;
     if (item>T->info)
@@ -269,12 +269,12 @@ Node* remove_(Node *T, int item){
     else if(item<T->info)
         T->left = remove_(T->left, item);
     else{
-        //No Children
+        //Sin hijos
         if(T->left==NULL && T->right==NULL){
             free(T);
             return NULL;
         }
-        //One Child
+        //Un solo hijo
         else if(T->left==NULL || T->right==NULL){
             Node *temp;
             if(T->left==NULL)
@@ -284,7 +284,7 @@ Node* remove_(Node *T, int item){
             free(T);
             return temp;
         }
-        //Two Children
+        //Dos hijos
         else{
             //Find Max
             Node *temp = findMax(T->left);

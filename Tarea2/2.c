@@ -29,11 +29,6 @@ int, Retorna el menor valor, de los mayores a n.
 int sucesor(Node* T, int n, int u){
     // Recorrido In-orden
     int mejor = u;
-    int pasocorbata;
-    Node* nodeRight;
-    Node* nodeLeft;
-    int nodeValue;
-    int dif;
 
     /*****
     *
@@ -53,31 +48,32 @@ int sucesor(Node* T, int n, int u){
     Returns:
     *
     int, Retorna el sucesor.
-    *****/
-    int inOrden(Node* T){
-        pasocorbata = 1;
-        if(T == NULL) return u;
-        nodeRight = getRight(T);
-        nodeLeft = getLeft(T);
-        inOrden(nodeLeft);
-        nodeValue = getValue(T);
-        dif = nodeValue - n;
-        if(dif > 0){
-            if(dif < mejor)
-                mejor = dif;
-            else
-                pasocorbata = 0;
+    *****/   
+    int inOrden(Node* Node){
+        int pasocorbata = 1;
+        if(Node != NULL){
+            inOrden(getLeft(Node));
+            int dif = getValue(Node) - n;
+            if(dif > 0){
+                if(dif < mejor)
+                    mejor = dif;
+                else
+                    pasocorbata = 0;
+            }
+            if (pasocorbata)
+                inOrden(getRight(Node));
         }
-        if (pasocorbata)
-            inOrden(nodeRight);
-        //if(mejor == u) return u;
+        if(mejor == u) return u;
         return mejor + n;
     }
 
     return inOrden(T);
 }
 
+
+
 int main(int argc, char const *argv[]){
+
 
     FILE *fp;
     long u;
@@ -100,6 +96,8 @@ int main(int argc, char const *argv[]){
     while (!feof(fp)){
         fscanf(fp,"%s",command);
         
+        //printf("command: %s\n", command);
+
         if (!strncmp(command, "P", 1)){
             preOrden(T);
             printf("\n");
@@ -109,8 +107,8 @@ int main(int argc, char const *argv[]){
             int number = atoi(number_str);
 
             if(!strncmp(command, "S", 1)){
-                //sucesor(T, number, u);
-                printf("%d\n", sucesor(T, number, u)); 
+                int s = sucesor(T, number, u);
+                printf("%d\n", s); 
             } else if (!strncmp(command, "I", 1)){
                 T = insert(T, number);
             } else if (!strncmp(command, "B", 1)){
